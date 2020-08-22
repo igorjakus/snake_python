@@ -8,7 +8,7 @@ DIRECT_DICT = {"left" : (-unit, 0), "right" : (unit, 0),
 			"up" : (0, -unit), "down" : (0, unit), None: (0, 0)}
 
 OPPOSITES = {"left" : "right", "right" : "left",
-			"up" : "down", "down" : "up"}
+			"up" : "down", "down" : "up", None: False}
 
 
 class Square:
@@ -34,12 +34,12 @@ class Snake:
 				(part.x, part.y, unit, unit))
 
 	def change_direction(self, direction):
-		self.direction = direction
+		if self. direction != OPPOSITES[direction]:	
+			self.direction = direction
 
 	def move(self):
 
-		tempx = self.body[-1].x
-		tempy = self.body[-1].y
+		x, y  = self.body[-1].x, self.body[-1].y
 
 		if self.direction:
 			# moving all snake parts
@@ -50,7 +50,7 @@ class Snake:
 		# appending new snake part
 		if self.after_eating:
 			self.after_eating = False
-			self.body.append(Square(tempx, tempy))
+			self.body.append(Square(x, y))
 
 		#moving the head
 		x, y = DIRECT_DICT[self.direction]
@@ -65,10 +65,10 @@ class Snake:
 				return True
 
 		# check collision with screen
-		if self.body[0].x > unit*39 or self.body[0].y > unit*39 or self.body[0].x < 0 or self.body[0].y < 0:
+		x, y = self.body[0].x, self.body[0].y
+		if x < 0 or y < 0 or x > unit*39 or y > unit*39:
 			return True
-		else: 
-			return False
+		return False
 
 	def check_apple(self, apple):
 		x, y = self.body[0].x, self.body[0].y

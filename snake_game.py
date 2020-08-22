@@ -30,6 +30,7 @@ class SnakeGame:
 		self.screen = pygame.display.set_mode(self.settings.window)
 		pygame.display.set_caption(self.settings.screen_caption)
 
+		self.speed =  1000.0 / self.settings.speed
 		self.delta = 0.0
 		self.game_over = False
 		self.clock = pygame.time.Clock()
@@ -39,7 +40,7 @@ class SnakeGame:
 
 	def run_game(self):
 		while not self.game_over:
-			self.delta += self.clock.tick() / 1000.0
+			self.delta += self.clock.tick() / self.speed
 			while self.delta > 1 / 20.0:
 				self._check_events()
 				self.snake.move()
