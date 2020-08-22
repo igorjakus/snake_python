@@ -21,7 +21,7 @@ KEYBOARD = {
 }
 
 
-class SnakeGame:
+class Game:
 
 	def __init__(self):
 
@@ -72,8 +72,3 @@ class SnakeGame:
 		self.snake.blitme()
 		self.apple.blitme()
 		pygame.display.flip()
-
-
-if __name__ == '__main__':
-	snake = SnakeGame()
-	snake.run_game()
