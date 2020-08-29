@@ -1,5 +1,4 @@
-# snake
-Snake game made in Python with pygame module
+# Snake made in Python with Pygame
 
 ## controls
 ###### move
