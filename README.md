@@ -1,7 +1,7 @@
 # snake
 Snake game made in Python with pygame module
 
-Control:
+# control
 UP - Up-Arrow, W
 LEFT - Left-Arrow, A
 RIGHT - Right-Arrow, D
