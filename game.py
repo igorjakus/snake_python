@@ -1,6 +1,5 @@
-import sys
 import pygame
-
+from sys import exit
 from settings import Settings
 from snake import Snake, Apple
 
@@ -28,9 +27,9 @@ class Game:
 		pygame.init()
 		self.settings = Settings()
 		self.screen = pygame.display.set_mode(self.settings.window)
-		pygame.display.set_caption(self.settings.screen_caption)
+		pygame.display.set_caption("Snake Game - Python 3, Igor Jakus")
 
-		self.speed =  1000.0 / self.settings.speed
+		self.game_speed =  1000.0 / self.settings.game_speed
 		self.delta = 0.0
 		self.game_over = False
 		self.clock = pygame.time.Clock()
@@ -40,7 +39,7 @@ class Game:
 
 	def run_game(self):
 		while not self.game_over:
-			self.delta += self.clock.tick() / self.speed
+			self.delta += self.clock.tick() / self.game_speed
 			while self.delta > 1 / 20.0:
 				self._check_events()
 				self.snake.move()
@@ -55,13 +54,13 @@ class Game:
 	def _check_events(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				self.handle_quit(event)
+				self.handle_quit()
 
 			elif event.type == pygame.KEYDOWN:
 				self.handle_keydown(event)
 
-	def handle_quit(self, event):
-		sys.exit()
+	def handle_quit(self):
+		exit()
 
 	def handle_keydown(self, event):
 		if event.key in KEYBOARD:

@@ -1,6 +1,6 @@
 from settings import Settings
+from random import randint
 import pygame
-import random
 
 unit = Settings().unit
 
@@ -86,10 +86,11 @@ class Apple:
 		self.color = self.settings.apple_color
 
 	def blitme(self):
-		pygame.draw.rect(self.screen, self.color, (self.x, self.y, unit, unit))
+		pygame.draw.rect(self.screen, self.color, 
+					(self.x, self.y, unit, unit))
 
 	def move(self):
 		self.x, self.y = self.rand_pos()
 
 	def rand_pos(self):
-		return random.randint(0, 39) * unit, random.randint(0, 39) * unit
+		return randint(0, 39) * unit, randint(0, 39) * unit
