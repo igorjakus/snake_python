@@ -71,3 +71,8 @@ class Game:
         self.snake.blitme()
         self.apple.blitme()
         pygame.display.flip()
+
+# Running the game
+if __name__ == '__main__':
+    game = Game()
+    game.run_game()
