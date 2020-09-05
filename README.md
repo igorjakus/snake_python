@@ -8,3 +8,6 @@ space and esc
 
 ## settings
 settings.py
+
+## requirements
+pygame 1.9.6
