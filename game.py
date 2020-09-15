@@ -6,17 +6,17 @@ from snake import Snake, Apple
 KEYBOARD = {
     pygame.K_w: 'up',
     pygame.K_UP: 'up',
-    
+
     pygame.K_a: 'left',
     pygame.K_LEFT: 'left',
-    
+
     pygame.K_d: 'right',
     pygame.K_RIGHT: 'right',
-    
+
     pygame.K_s: 'down',
     pygame.K_DOWN: 'down',
 
-    pygame.K_SPACE: None, 
+    pygame.K_SPACE: None,
 }
 
 
@@ -29,7 +29,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.settings.window)
         pygame.display.set_caption("Snake Game - Python 3, Igor Jakus")
 
-        self.game_speed =  1000.0 / self.settings.game_speed
+        self.game_speed = 1000.0 / self.settings.game_speed
         self.delta = 0.0
         self.game_over = False
         self.clock = pygame.time.Clock()
@@ -43,13 +43,12 @@ class Game:
             while self.delta > 1 / 20.0:
                 self._check_events()
                 self.snake.move()
-                #if self.snake.check_lose():
+                # if self.snake.check_lose():
                 #    self.game_over == True
                 #    break
                 self.snake.check_apple(self.apple)
                 self._update_screen()
                 self.delta = 0.0
-            
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -59,7 +58,8 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 self.handle_keydown(event)
 
-    def handle_quit(self):
+    @staticmethod
+    def handle_quit():
         exit()
 
     def handle_keydown(self, event):
@@ -71,6 +71,7 @@ class Game:
         self.snake.blitme()
         self.apple.blitme()
         pygame.display.flip()
+
 
 # Running the game
 if __name__ == '__main__':

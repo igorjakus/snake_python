@@ -4,55 +4,56 @@ import pygame
 
 unit = Settings().unit
 
-DIRECT_DICT = {"left" : (-unit, 0), "right" : (unit, 0),
-            "up" : (0, -unit), "down" : (0, unit), None: (0, 0)}
+DIRECT_DICT = {"left": (-unit, 0), "right": (unit, 0),
+               "up": (0, -unit), "down": (0, unit), None: (0, 0)}
 
-OPPOSITES = {"left" : "right", "right" : "left",
-            "up" : "down", "down" : "up", None: False}
+OPPOSITES = {"left": "right", "right": "left",
+             "up": "down", "down": "up", None: False}
 
 
 class Square:
-    def __init__(self, x = unit*19, y = unit*19):
+    def __init__(self, x=unit * 19, y=unit * 19):
         self.settings = Settings()
         self.unit = unit
         self.color = self.settings.snake_color
         self.x = x
         self.y = y
 
+
 class Snake:
 
     def __init__(self, snake_game):
         self.screen_rect = snake_game.screen.get_rect()
         self.screen = snake_game.screen
-        self.body = [ Square() ]
+        self.body = [Square()]
         self.after_eating = False
         self.direction = None
-        
+
     def blitme(self):
         for part in self.body:
-            pygame.draw.rect(self.screen, part.color, 
-                (part.x, part.y, unit, unit))
+            pygame.draw.rect(self.screen, part.color,
+                             (part.x, part.y, unit, unit))
 
     def change_direction(self, direction):
-        if self. direction != OPPOSITES[direction]:    
+        if self.direction != OPPOSITES[direction]:
             self.direction = direction
 
     def move(self):
 
-        x, y  = self.body[-1].x, self.body[-1].y
+        x, y = self.body[-1].x, self.body[-1].y
 
         if self.direction:
             # moving all snake parts
             for index in reversed(range(1, len(self.body))):
-                self.body[index].x = self.body[index-1].x
-                self.body[index].y = self.body[index-1].y
+                self.body[index].x = self.body[index - 1].x
+                self.body[index].y = self.body[index - 1].y
 
         # appending new snake part
         if self.after_eating:
             self.after_eating = False
             self.body.append(Square(x, y))
 
-        #moving the head
+        # moving the head
         x, y = DIRECT_DICT[self.direction]
         self.body[0].x += x
         self.body[0].y += y
@@ -66,7 +67,7 @@ class Snake:
 
         # check collision with screen
         x, y = self.body[0].x, self.body[0].y
-        if x < 0 or y < 0 or x > unit*39 or y > unit*39:
+        if x < 0 or y < 0 or x > unit * 39 or y > unit * 39:
             return True
         return False
 
@@ -76,7 +77,8 @@ class Snake:
             self.after_eating = True
             self.move()
             apple.move()
-    
+
+
 class Apple:
     def __init__(self, snake_game):
         self.screen = snake_game.screen
@@ -86,11 +88,12 @@ class Apple:
         self.color = self.settings.apple_color
 
     def blitme(self):
-        pygame.draw.rect(self.screen, self.color, 
-                    (self.x, self.y, unit, unit))
+        pygame.draw.rect(self.screen, self.color,
+                         (self.x, self.y, unit, unit))
 
     def move(self):
         self.x, self.y = self.rand_pos()
 
-    def rand_pos(self):
+    @staticmethod
+    def rand_pos():
         return randint(0, 39) * unit, randint(0, 39) * unit
