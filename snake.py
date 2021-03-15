@@ -5,17 +5,16 @@ import pygame
 unit = Settings().unit
 
 DIRECT_DICT = {"left": (-unit, 0), "right": (unit, 0),
-               "up": (0, -unit), "down": (0, unit), None: (0, 0)}
+               "up": (0, -unit), "down": (0, unit)}
 
 OPPOSITES = {"left": "right", "right": "left",
-             "up": "down", "down": "up", None: False}
+             "up": "down", "down": "up"}
 
 
 class Square:
     def __init__(self, x=unit * 19, y=unit * 19):
-        self.settings = Settings()
-        self.unit = unit
-        self.color = self.settings.snake_color
+        self.unit = Settings().unit
+        self.color = Settings().snake_color
         self.x = x
         self.y = y
 
@@ -27,19 +26,28 @@ class Snake:
         self.screen = snake_game.screen
         self.body = [Square()]
         self.after_eating = False
-        self.direction = None
+        self.direction = "up"
 
+    def reset(self):
+        self.body = [Square()]
+        
     def blitme(self):
         for part in self.body:
             pygame.draw.rect(self.screen, part.color,
                              (part.x, part.y, unit, unit))
 
     def change_direction(self, direction):
-        if self.direction != OPPOSITES[direction]:
+        if len(self.body) > 1:
+            if self.direction != OPPOSITES[direction]:
+                self.direction = direction
+                return True
+            else:
+                return False
+        else:
             self.direction = direction
+            return True
 
     def move(self):
-
         x, y = self.body[-1].x, self.body[-1].y
 
         if self.direction:
@@ -59,12 +67,12 @@ class Snake:
         self.body[0].y += y
 
     def check_lose(self):
-
         # check collision with himself
-        for part in self.body[1:]:
-            if part.x == self.body[0].x or part.y == self.body[0].y:
-                return True
-
+        if not self.after_eating:
+            for part in self.body[1:]:
+                if part.x == self.body[0].x and part.y == self.body[0].y:
+                    return True
+        
         # check collision with screen
         x, y = self.body[0].x, self.body[0].y
         if x < 0 or y < 0 or x > unit * 39 or y > unit * 39:
@@ -83,9 +91,8 @@ class Apple:
     def __init__(self, snake_game):
         self.screen = snake_game.screen
         self.screen_rect = snake_game.screen.get_rect()
-        self.settings = Settings()
         self.x, self.y = self.rand_pos()
-        self.color = self.settings.apple_color
+        self.color = Settings().apple_color
 
     def blitme(self):
         pygame.draw.rect(self.screen, self.color,

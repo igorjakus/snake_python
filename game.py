@@ -15,8 +15,6 @@ KEYBOARD = {
 
     pygame.K_s: 'down',
     pygame.K_DOWN: 'down',
-
-    pygame.K_SPACE: None,
 }
 
 
@@ -31,21 +29,23 @@ class Game:
 
         self.game_speed = 1000.0 / self.settings.game_speed
         self.delta = 0.0
-        self.game_over = False
         self.clock = pygame.time.Clock()
+        self.pause = True
 
         self.snake = Snake(self)
         self.apple = Apple(self)
 
     def run_game(self):
-        while not self.game_over:
+        while True:
             self.delta += self.clock.tick() / self.game_speed
             while self.delta > 1 / 20.0:
                 self._check_events()
-                self.snake.move()
-                # if self.snake.check_lose():
-                #    self.game_over == True
-                #    break
+                if not self.pause:
+                    self.snake.move()
+                if self.snake.check_lose():
+                    self.snake.reset()
+                    self.apple.move()   
+                    self.pause = True   
                 self.snake.check_apple(self.apple)
                 self._update_screen()
                 self.delta = 0.0
@@ -63,8 +63,15 @@ class Game:
         exit()
 
     def handle_keydown(self, event):
+        # Changing direction
         if event.key in KEYBOARD:
-            self.snake.change_direction(KEYBOARD[event.key])
+            if self.snake.change_direction(KEYBOARD[event.key]):
+                self.pause = False
+
+        # Pausing snake movement
+        elif event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
+            self.pause = True
+
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
